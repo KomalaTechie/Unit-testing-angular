@@ -1,0 +1,27 @@
+<p>Here is the practice session</p>
+<div>
+    <label> Enter text here </label>
+    <input title="name" placeholder="enter name" type="text" [(ngModel)]="usernamevalue" type="text" name="usernamevalue"/>
+
+</div>
+<div>
+    <span> <p>Here is the text you entered : <b>{{ usernamevalue }}</b></p></span>
+</div>
+<hr />
+<button title="Get Student List" (click)="buttonClicked(usernamevalue)">Get Student  and actors List</button>
+@if (textEntered && students) {
+    @for (student of (students | async); track student.name){
+        <div id="namec">
+          {{ student.name }}
+        </div>
+        }
+  } 
+
+  @if (textEntered && students) {
+    <h2 id="item">Ators ...</h2>
+    @for (actor of (actors | async); track actor.name){
+        <div>
+          {{ actor.name }}
+        </div>
+        }
+  } 
