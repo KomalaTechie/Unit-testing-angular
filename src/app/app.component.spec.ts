@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 import { provideRouter } from '@angular/router';
 import { By } from '@angular/platform-browser'; 
 import { fakeAsync, tick } from '@angular/core/testing';
+import { CustomPipe } from './custom.pipe';
 
 
 describe('AppComponent', () => {
@@ -13,6 +14,7 @@ describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let router = Router;
   let location: Location
+  let customPipe: CustomPipe;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
@@ -22,6 +24,7 @@ describe('AppComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     location = TestBed.inject(Location)
+    customPipe = new CustomPipe();
     router: TestBed.inject(Router)// objRouter.initialnavigation();
   });
 
@@ -29,6 +32,20 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
+  });
+
+  it('should render custom file size with default file type ', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    component.file = 100000;
+    expect(customPipe.transform(component.file)).toEqual('File size is - 0.10 GB');
+  });
+
+  it('should render custom file size with custom file type ', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    component.file = 500000;
+    expect(customPipe.transform(component.file, ' MB')).toEqual('File size is - 0.48 MB');
   });
 
   it(`should have the People' title`, () => {

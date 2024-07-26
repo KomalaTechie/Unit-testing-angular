@@ -8,6 +8,7 @@ import { StudentData } from './studentData';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from  '@angular/common/http/testing';
 import { tick } from '@angular/core/testing';
+import { UpperCasePipe } from '@angular/common';
 
 // const mockData = {
 //   "users": [
@@ -51,6 +52,7 @@ describe('PracticeComponent', () => {
   let button:HTMLElement;
   let httpClient: HttpClient;
   let httpTestControl: HttpTestingController
+  let upperPipe: UpperCasePipe;
 
   beforeEach(waitForAsync(() => {
      TestBed.configureTestingModule({
@@ -64,7 +66,7 @@ describe('PracticeComponent', () => {
       httpTestControl = TestBed.inject(HttpTestingController)
       fixture.detectChanges();
       button = fixture.debugElement.nativeElement.querySelector('button')
-     
+      upperPipe = new UpperCasePipe()
       servicSpy.getStudentList();
       servicSpy.getActors();
       })
@@ -79,7 +81,12 @@ describe('PracticeComponent', () => {
       expect(component).toBeTruthy();
       expect(component.usernamevalue).toEqual('Accion')
     });
-  
+    
+    it('should render title in uppercase using pipe', () => {
+      expect(component).toBeTruthy();
+      expect(upperPipe.transform(component.usernamevalue)).toEqual('ACCION');
+    });
+
     it('should display name on click of a button function call', () => {
       expect(component.usernamevalue).toEqual('Accion')
       button.click();
