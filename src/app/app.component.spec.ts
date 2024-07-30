@@ -74,4 +74,10 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(location.path()).toEqual('/courses');
   }));
+
+  it('should display message about the changes made on application', ()=> {
+    fixture.detectChanges();
+    component.displayMessage('No changes yet - Appcomponent');
+    expect(component.titleHas.msg).toEqual('No changes yet - Appcomponent');
+  })
 });
