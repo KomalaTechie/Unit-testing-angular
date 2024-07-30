@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PracticeService } from './practice.service';
 import { Observable, of } from 'rxjs';
@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { AsyncPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
+import { RouterModule, RouterOutlet } from '@angular/router';
 
 export const url = 'https://freetestapi.com/api/v1/actors';
 
@@ -34,7 +35,7 @@ export interface ActorRef {
 @Component({
   selector: 'app-practice',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, AsyncPipe, HttpClientModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, AsyncPipe, HttpClientModule, RouterOutlet, RouterModule ],
   templateUrl: './practice.component.html',
   styleUrl: './practice.component.css',
   providers:[PracticeService]
@@ -46,14 +47,17 @@ export class PracticeComponent implements OnInit{
   textEntered: boolean = false;
   students: Observable<StudentDataRef[]>;
   actors: Observable<ActorRef[]>;
+  @Output() displayMessage:EventEmitter<any> = new EventEmitter();
+  message = {msg: 'you clicked a button on practiceComponent'}
 
   constructor(private practiceService: PracticeService, public http: HttpClient){}
   ngOnInit() {
   }
 
   buttonClicked(val:string) {
-    this.textEntered = true
+    this.textEntered = true;
     this.students = this.practiceService.getStudentList();
     this.actors = this.practiceService.getActors();
+    this.displayMessage.emit(this.message.msg);
   }
 }

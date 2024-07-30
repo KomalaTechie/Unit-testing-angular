@@ -165,6 +165,11 @@
   .routerList{
     color:blue;
   }
+
+  .fontColor {
+    color: red;
+    padding-top:6px;
+  }
   
 
   @media screen and (max-width: 650px) {
@@ -186,6 +191,7 @@
   <div class="content">
     <div class="left-side">
       <h1>Hello, People</h1>
+      <div class="fontColor"> {{this.titleHas.msg}}</div>
       <nav>
         <ul class="routerList">
           <li id="courses" routerLink="courses">courses</li>
@@ -193,8 +199,8 @@
         </ul>
         </nav>
         <div> <b>{{file | fileSize: 'GB'}} </b></div>
-      <app-practice></app-practice>
-      <app-users></app-users>
+          <app-practice (displayMessage)="displayMessage($event)"></app-practice>
+          <app-users></app-users>
 
     </div>
     <div class="divider" role="separator" aria-label="Divider">

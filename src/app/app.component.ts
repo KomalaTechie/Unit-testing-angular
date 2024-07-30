@@ -15,11 +15,17 @@ import { CustomPipe } from './custom.pipe';
 })
 export class AppComponent {
   title = 'People';
-  titleHas = 'komala';
+  titleHas: any;
   file: number = 100000;
+  page:any = 'Appcomponent';
 
   constructor(public router: Router){}
   ngOnInit() {
+    this.titleHas = {msg: 'No changes yet - ' + this.page}
     this.router.navigateByUrl('/about');
+  }
+
+  displayMessage(msg: string = 'hi') {
+   return this.titleHas.msg = msg;
   }
 }

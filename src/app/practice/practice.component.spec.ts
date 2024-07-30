@@ -1,14 +1,21 @@
-import { ComponentFixture, TestBed, getTestBed, fakeAsync, flush, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/core/testing';
 import { PracticeComponent } from './practice.component';
 import { By } from '@angular/platform-browser';
-import { PracticeService, url } from './practice.service';
-import { StudentDataRef, ActorRef } from './practice.component';
+import { PracticeService } from './practice.service';
 import { of } from 'rxjs';
 import { StudentData } from './studentData';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from  '@angular/common/http/testing';
 import { tick } from '@angular/core/testing';
 import { UpperCasePipe } from '@angular/common';
+import { AppComponent } from '../app.component';
+
+
+
+import { Router, RouterLinkWithHref } from '@angular/router';
+import { Location } from '@angular/common';
+import { routes } from '../app.routes';
+import { provideRouter } from '@angular/router';
 
 // const mockData = {
 //   "users": [
@@ -47,6 +54,8 @@ let mockActors = [
 describe('PracticeComponent', () => {
   let component: PracticeComponent;
   let fixture: ComponentFixture<PracticeComponent>;
+  let appComponent: AppComponent;
+  let appFixture: ComponentFixture<AppComponent>;
   let service : any;
   let servicSpy = jasmine.createSpyObj('PracticeService', ['getStudentList', 'getActors']);
   let button:HTMLElement;
@@ -57,14 +66,16 @@ describe('PracticeComponent', () => {
   beforeEach(waitForAsync(() => {
      TestBed.configureTestingModule({
       imports: [PracticeComponent, HttpClientTestingModule],
-      providers: [{ provide: PracticeService, useValue: servicSpy  }]
-      // providers: [PracticeService]
+      providers: [{ provide: PracticeService, useValue: servicSpy  }, provideRouter(routes)]
     }).compileComponents().then(()=> {
       fixture = TestBed.createComponent(PracticeComponent);
       component = fixture.componentInstance;
+      appFixture = TestBed.createComponent(AppComponent);
+      appComponent = appFixture.componentInstance;
       service = TestBed.inject(PracticeService) as jasmine.SpyObj<PracticeService>;;
       httpTestControl = TestBed.inject(HttpTestingController)
       fixture.detectChanges();
+      appFixture.detectChanges();
       button = fixture.debugElement.nativeElement.querySelector('button')
       upperPipe = new UpperCasePipe()
       servicSpy.getStudentList();
@@ -122,5 +133,20 @@ describe('PracticeComponent', () => {
           expect(mockActors.length).toEqual(1);
         })
       });
+
+      it('should get initial mssage on app component', ()=>{
+        let ele = appFixture.debugElement.nativeElement.querySelector(".fontColor");
+        expect(ele.textContent).toEqual(' No changes yet - Appcomponent');
+        appComponent.titleHas ={msg: 'changes mage in spec file'}
+        appFixture.detectChanges();
+        expect(ele.textContent).toEqual(' changes mage in spec file');
+      });
+
+      it('should trigger event and change message', fakeAsync(()=>{
+        component.displayMessage.subscribe((msg)=>{
+          expect(msg).toEqual('you clicked a button on practiceComponent');
+        })
+        component.buttonClicked('');
+      }));
   });
 

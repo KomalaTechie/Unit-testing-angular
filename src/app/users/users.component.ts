@@ -11,11 +11,5 @@ export class UsersComponent {
 
 
   ngOnInit() {
-    // this.getUsers('');
   }
-
-  // getUsers(val: any) {
-  //   this.service.getUsers(val).subscribe((res)=> {console.log(res, val)})
-  // }
-
 }
